@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  context-path: /
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    consul:
+      ##注册中心ip地址
+      host: 192.168.1.7
+      ##注册中心监听端口
+      port: 8500
+      discovery:
+        register: true
+        ##注册实例id
+        instance-id: api-gateway
+
+zuul:
+  routes:
+    ##调用订单服务
+    order-api:
+      path: /order-api/**
+      serviceId: order-service
+
+    ##调用支付服务
+    payment-api:
+      path: /payment-api/**
+      serviceId: payment-service
+
+##调用微服务超时设置
+ribbon:
+  ReadTimeout: 6000
+  SocketTimeout: 6000
+
+##熔断超时设置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
+
+
+management:
+  health:
+    consul:
+      enabled: false

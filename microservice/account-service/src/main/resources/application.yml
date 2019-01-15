@@ -1,0 +1,38 @@
+server:
+  port: 8082
+  context-path: /
+
+spring:
+  application:
+    name: account-service
+
+  cloud:
+    consul:
+      ##注册中心ip地址
+      host: 192.168.1.7
+      ##注册中心监听端口
+      port: 8500
+      discovery:
+        register: true
+        ##注册实例id
+        instance-id: account-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.6:3306/db_account?useSSL=false
+    username: root
+    password: root
+    ##初始化连接数
+    initialSize: 5
+    ##最小连接数
+    minIdle: 5
+    ##最大连接数
+    maxActive: 20
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+management:
+  health:
+    consul:
+      enabled: false

@@ -1,0 +1,62 @@
+server:
+  port: 8084
+  context-path: /
+
+spring:
+  application:
+    name: payment-service
+
+  cloud:
+    consul:
+      ##注册中心ip地址
+      host: 192.168.1.7
+      ##注册中心监听端口
+      port: 8500
+      discovery:
+        register: true
+        instance-id: payment-service
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.6:3306/db_payment?useSSL=false
+    username: root
+    password: root
+    ##初始化连接数
+    initialSize: 5
+    ##最小连接数
+    minIdle: 5
+    ##最大连接数
+    maxActive: 20
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+##调用微服务超时设置
+ribbon:
+  ReadTimeout: 6000
+  SocketTimeout: 6000
+
+##熔断超时设置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
+
+management:
+  health:
+    consul:
+      enabled: false
+
+
+feign:
+  remote:
+    ##调用商品微服务名称
+    commodity-service: commodity-service
+    ##调用账户微服务名称
+    account-service: account-service
+    ##调用订单微服务名称
+    order-service: order-service
